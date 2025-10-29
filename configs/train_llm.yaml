@@ -1,0 +1,49 @@
+# LoRA/QLoRA fine-tuning configuration for continual learning slices.
+
+model:
+  base_model: meta-llama/Llama-3.1-8B
+  load_in_4bit: true
+  bnb_4bit_compute_dtype: bfloat16
+  bnb_4bit_use_double_quant: true
+  bnb_4bit_quant_type: nf4
+  torch_dtype_fallback: bfloat16
+
+data:
+  max_context_tokens: 4096
+  packed_average_tokens_per_sample:
+    ctx4k: 3000
+    ctx8k: 6000
+  tokens_per_slice_budget: 25000000
+  replay_fraction_default: 0.10
+  dataloader_num_workers: 4
+  seed: 17
+
+training:
+  micro_batch_size: 1
+  gradient_accumulation: auto  # computed from tokens_per_step target.
+  tokens_per_step_target: 128000
+  learning_rate: 1.0e-4
+  lr_scheduler: cosine
+  warmup_steps: 200
+  max_steps: null  # derive from token budget.
+  weight_decay: 0.01
+  lora:
+    r: 64
+    alpha: 16
+    dropout: 0.05
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+  gradient_checkpointing: true
+  logging_steps: 10
+  save_steps: 1000
+  seed: 17
+
+replay:
+  tracks:
+    - name: noreplay
+      replay_fraction: 0.0
+    - name: replay10
+      replay_fraction: 0.10

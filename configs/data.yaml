@@ -1,0 +1,45 @@
+# Dataset configuration and access placeholders.
+# Populate dataset roots with secure paths (e.g., mounted Drive, GCS buckets).
+# Never commit credentialed information.
+
+candidate_datasets:
+  mimic_iv_ext_22mcts:
+    enabled: true
+    source: TODO_REPLACE_WITH_SECURE_PATH
+    time_field: charttime
+    id_field: subject_id
+    description: >-
+      Continuous time-series signals with relative timestamps. Requires preprocessing
+      to map into fixed windows for LLM tokenization.
+  mimic_iv_ext_bhc:
+    enabled: true
+    source: TODO_REPLACE_WITH_SECURE_PATH
+    time_field: discharge_time
+    id_field: subject_id
+    description: Hospital course summarization notes.
+  mimic_iv_hosp:
+    enabled: true
+    source: TODO_REPLACE_WITH_SECURE_PATH
+    time_field: discharge_time
+    id_field: subject_id
+    description: Core structured tables for demographics and admissions.
+
+chronology:
+  mode: quarterly  # quarterly or yearly slices
+  total_slices: 8
+  baseline_slice: 0
+  timestamp_tz: UTC
+
+splits:
+  member_count: 1000
+  non_member_count: 1000
+  temporal_panels:
+    past_members: 500
+    future_non_members: 500
+  global_holdout_source: TODO_DEFINE_NON_MEMBER_POOL
+
+paraphrase_subset:
+  size: 500
+  variants_per_member: [2, 4]
+  similarity_threshold: 0.82
+  length_ratio_bounds: [0.75, 1.25]

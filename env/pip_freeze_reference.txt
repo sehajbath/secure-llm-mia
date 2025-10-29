@@ -1,0 +1,3 @@
+# Placeholder for a curated pip freeze captured after a successful Colab run.
+# Update this file by running `pip freeze` in Colab once dependencies are installed
+# and pasting the sorted output here for reproducibility tracking.

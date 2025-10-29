@@ -1,0 +1,26 @@
+# Temporal slicing configuration for continual learning.
+
+slices:
+  total: 8
+  chronology:
+    mode: quarterly
+    reference_start: 2017-01-01
+  token_budget:
+    tokens_per_slice: 25000000
+    tokens_per_step: 128000
+  replay_conditions:
+    - name: noreplay
+      replay_fraction: 0.0
+    - name: replay10
+      replay_fraction: 0.1
+
+id_artifacts:
+  root: artifacts
+  members_pattern: "artifacts/slice_{slice_id}/ids/members.txt"
+  non_members_pattern: "artifacts/slice_{slice_id}/ids/non_members.txt"
+  temporal_panels:
+    past_members_pattern: "artifacts/slice_{slice_id}/ids/past_members.txt"
+    future_non_members_pattern: "artifacts/slice_{slice_id}/ids/future_non_members.txt"
+
+seeds:
+  values: [13, 17, 23]

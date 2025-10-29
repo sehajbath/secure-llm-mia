@@ -1,0 +1,34 @@
+# Membership inference attack configuration and hyper-parameters.
+
+defaults:
+  bootstrap_samples: 2000
+  auc_confidence_level: 0.95
+  tpr_targets: [0.01]
+  random_seed: 17
+
+attacks:
+  loss_confidence:
+    enabled: true
+    metrics: [nll, entropy, max_prob]
+  win_k_min_k:
+    enabled: true
+    k_values: [1, 5, 10, 20]
+    worst_percentiles: [0.05, 0.10]
+  label_free:
+    enabled: true
+    prompt_template: label_free/self_prompt_calibration.txt
+  paraphrase:
+    enabled: true
+    back_translation_model: TODO_CHOOSE_MODEL
+    synonym_swap_probability: 0.2
+  ensemble:
+    enabled: true
+    base_models: [logistic_regression, xgboost]
+    validation_fpr: 0.01
+  lira:
+    enabled: true
+    normalize: true
+    rolling_temporal_window: 2
+  adaptive:
+    enabled: false
+    stability_probes: 5
