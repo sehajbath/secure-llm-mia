@@ -13,7 +13,7 @@ candidate_datasets:
       to map into fixed windows for LLM tokenization.
   mimic_iv_ext_bhc:
     enabled: true
-    source: TODO_REPLACE_WITH_SECURE_PATH
+    source: /content/drive/MyDrive/mimic-iv-bhc/mimic-iv-bhc.csv
     time_field: discharge_time
     id_field: subject_id
     description: Hospital course summarization notes.
@@ -43,3 +43,9 @@ paraphrase_subset:
   variants_per_member: [2, 4]
   similarity_threshold: 0.82
   length_ratio_bounds: [0.75, 1.25]
+
+run_modes:
+  subset:
+    description: Quick debugging subset processed directly from the BHC CSV (≤2k rows).
+  full:
+    description: End-to-end experiments over the entire dataset (set SECURE_LLM_MIA_RUN_MODE=full).

@@ -4,15 +4,22 @@ Ready-to-run Google Colab project for evaluating membership inference attacks (M
 
 ## Quick Start
 1. Launch Colab and open `notebooks/00_colab_setup.ipynb`.
-2. Install dependencies from `env/requirements.txt`, authenticate with Hugging Face, and mount Google Drive.
-3. Configure dataset paths and credentials in `configs/data.yaml` and rerun notebooks 01–03 to prepare canonical Arrow/Parquet artifacts.
+2. Install dependencies from `env/requirements.txt`, authenticate with Hugging Face, and mount Google Drive (the repo is cloned into `/content/drive/MyDrive/secure-llm-mia`).
+3. Upload `mimic-iv-bhc/mimic-iv-bhc.csv` to Drive (default path: `/content/drive/MyDrive/mimic-iv-bhc/mimic-iv-bhc.csv`), update `configs/data.yaml` if your layout differs, and rerun notebooks 01–03.
 4. Iterate through notebooks 04–11 for fine-tuning, attack computation, and reporting. Use `12_run_sweep_driver.ipynb` or `scripts/run_*` as automation stubs once verified.
 
 ## Datasets & Guardrails
-- Candidate corpora: MIMIC-IV-Ext-22MCTS (time-series), MIMIC-IV-Ext-BHC (notes), MIMIC-IV v3.1 (hosp).
+- Candidate corpora: MIMIC-IV-Ext-22MCTS (time-series), MIMIC-IV-Ext-BHC (summaries), MIMIC-IV v3.1 (hosp).
+- The BHC CSV is loaded directly from Drive via `BHC_CSV_PATH` (default `/content/drive/MyDrive/mimic-iv-bhc/mimic-iv-bhc.csv`) using `src/data/bhc.py`.
 - Access requires PhysioNet credentialing and institutional approvals; never sync PHI into the repo.
 - Store raw data and intermediate text on encrypted Drive folders only. Use the config flag `disable_exports` (add to `configs/data.yaml`) to prevent accidental artifact syncing.
 - Paraphrase generation logs rejected candidates to support human review before export.
+
+## Run Modes (Subset vs Full)
+- Controlled via the environment variable `SECURE_LLM_MIA_RUN_MODE` (`subset` by default, `full` for full-scale experiments).
+- Subset mode limits the number of BHC rows read (≤2k) for quick smoke tests; canonical artifacts are suffixed with the run-mode name (e.g., `canonical_bhc_subset.parquet`).
+- Full mode processes all 270k rows—set `SECURE_LLM_MIA_RUN_MODE=full` before running notebook `00_colab_setup.ipynb` to propagate the setting through downstream notebooks and scripts.
+- `src/utils/runtime.py` centralizes the configuration so every notebook shares the same `PROJECT_ROOT`, `ARTIFACTS_DIR`, and run-mode-specific paths.
 
 ## Continual Fine-tuning Pipeline
 - Slices: `T=8` chronological windows (quarterly or yearly) with token budget `25M` per slice.

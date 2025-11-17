@@ -52,10 +52,12 @@ def load_notes(config: LoaderConfig) -> pd.DataFrame:
     raise NotImplementedError("Secure data loading is not implemented in this template.")
 
 
-def estimate_token_counts(df: pd.DataFrame, chars_per_token: float = 4.0) -> pd.DataFrame:
+def estimate_token_counts(df: pd.DataFrame, *, text_column: str = "note_text", chars_per_token: float = 4.0) -> pd.DataFrame:
     """Attach a naive token estimate column for planning budgets."""
     df = df.copy()
-    text_lengths = df["note_text"].str.len()
+    if text_column not in df.columns:
+        raise KeyError(f"Column `{text_column}` not found in DataFrame.")
+    text_lengths = df[text_column].str.len()
     df["tokens_estimate"] = (text_lengths / chars_per_token).round().astype(int)
     return df
 
