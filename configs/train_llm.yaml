@@ -1,7 +1,7 @@
 # LoRA/QLoRA fine-tuning configuration for continual learning slices.
 
 model:
-  base_model: meta-llama/Llama-3.1-8B
+  base_model: unsloth/Meta-Llama-3.1-8B-bnb-4bit
   load_in_4bit: true
   bnb_4bit_compute_dtype: bfloat16
   bnb_4bit_use_double_quant: true

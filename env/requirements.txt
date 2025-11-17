@@ -24,3 +24,4 @@ textdistance
 langid
 umap-learn
 wandb
+unsloth[colab]
