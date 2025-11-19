@@ -16,13 +16,13 @@ Ready-to-run Google Colab project for evaluating membership inference attacks (M
 - Paraphrase generation logs rejected candidates to support human review before export.
 
 ## Run Modes (Subset vs Full)
-- Controlled via the environment variable `SECURE_LLM_MIA_RUN_MODE` (`subset` by default, `full` for full-scale experiments).
-- Subset mode limits the number of BHC rows read (≤2k) for quick smoke tests; canonical artifacts are suffixed with the run-mode name (e.g., `canonical_bhc_subset.parquet`).
+- Controlled via the environment variable `SECURE_LLM_MIA_RUN_MODE` (`subset` by default, `full` for large-scale experiments).
+- Subset mode now materializes **30k BHC examples** and caps continual fine-tuning to **4 slices × ≈3 M tokens** (≈1k training docs per slice); canonical/packed artifacts are suffixed with the run-mode name (e.g., `canonical_bhc_subset.parquet`).
 - Full mode processes all 270k rows—set `SECURE_LLM_MIA_RUN_MODE=full` before running notebook `00_colab_setup.ipynb` to propagate the setting through downstream notebooks and scripts.
 - `src/utils/runtime.py` centralizes the configuration so every notebook shares the same `PROJECT_ROOT`, `ARTIFACTS_DIR`, and run-mode-specific paths.
 
 ## Continual Fine-tuning Pipeline
-- Slices: `T=8` chronological windows (quarterly or yearly) with token budget `25M` per slice.
+- Slices: `T=4` chronological windows (quarterly) with token budget `≈3 M` per slice in subset mode (extendable for full runs).
 - Token accounting: keep `tokens_per_step = 128k` via `micro_batch × grad_accum × avg_tokens/sample`.
 - Replay: run tracks `{noreplay, replay10}` (10% replay) with shared seeds (`[13, 17, 23]`).
 - Outputs: checkpoints under `checkpoints/slice_{t}/{track}/` plus member/non-member IDs in `artifacts/slice_{t}/ids/`.

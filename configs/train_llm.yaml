@@ -13,7 +13,7 @@ data:
   packed_average_tokens_per_sample:
     ctx4k: 3000
     ctx8k: 6000
-  tokens_per_slice_budget: 25000000
+  tokens_per_slice_budget: 3000000
   replay_fraction_default: 0.10
   dataloader_num_workers: 4
   seed: 17

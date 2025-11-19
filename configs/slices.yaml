@@ -1,12 +1,12 @@
 # Temporal slicing configuration for continual learning.
 
 slices:
-  total: 8
+  total: 4
   chronology:
     mode: quarterly
     reference_start: 2017-01-01
   token_budget:
-    tokens_per_slice: 25000000
+    tokens_per_slice: 3000000
     tokens_per_step: 128000
   replay_conditions:
     - name: noreplay

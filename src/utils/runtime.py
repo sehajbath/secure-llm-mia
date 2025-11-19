@@ -18,8 +18,8 @@ class RunModeConfig:
 RUN_MODE_REGISTRY: dict[str, RunModeConfig] = {
     "subset": RunModeConfig(
         name="subset",
-        max_rows=2000,
-        description="Quick debugging subset (<=2k rows) for lightweight Colab smoke tests.",
+        max_rows=30_000,
+        description="30k-example subset powering the 4-slice, 3M-token continual fine-tuning regime.",
     ),
     "full": RunModeConfig(
         name="full",
